@@ -51,7 +51,6 @@ const RootLayout = async ({
 }
 
 import Image from 'next/image';
-import { signOut } from 'next-auth/react';
 
 const InConstruction = async () => {
     const session = await getServerSession(authOptions);
