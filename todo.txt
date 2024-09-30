@@ -1,0 +1,4 @@
+-------------------- Production Build Fix --------------------------
+* Removed birthday feature because of tightly coupled.
+* Need to add verify delete account feature
+* Cleared all unwanted ts fixes.
