@@ -28,7 +28,7 @@ export default function LoginInPage() {
     const {
         handleSubmit,
         register,
-        formState: { error, isSubmitting }
+        formState: { isSubmitting }
     } = useForm<AuthSchemaType>({ resolver: zodResolver(AuthSchema) });
     const [ showPassword, toggleShowPassword ] = useToggle();
     const router = useRouter();
@@ -79,7 +79,6 @@ export default function LoginInPage() {
                         className="peer block w-full rounded-md border border-gray-200 py-[9px] px-3 text-sm outline-2 placeholder:text-gray-500"
                         id="email"
                         type="email"
-                        name="email"
                         placeholder="Enter your email address"
                         {...register("email")}
                         required
@@ -97,15 +96,14 @@ export default function LoginInPage() {
                             className="peer block w-full rounded-md border border-gray-200 py-[9px] px-3 text-sm outline-2 placeholder:text-gray-500"
                             id="password"
                             type={showPassword ? 'text' : 'password'}
-                            name="password"
                             placeholder="Enter password"
                             {...register("password")}
                             required
                             minLength={6}
                         />
                         {showPassword ?
-                              <IconEyeOff className={passwordIconClass} onClick={toggleShowPassword} />
-                            : <IconEye className={passwordIconClass} onClick={toggleShowPassword}/>
+                              <IconEyeOff className={passwordIconClass} onClick={() => toggleShowPassword()} />
+                            : <IconEye className={passwordIconClass} onClick={() => toggleShowPassword()}/>
                         }
                     </div>
                 </fieldset>

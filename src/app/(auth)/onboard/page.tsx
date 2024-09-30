@@ -2,7 +2,8 @@
 
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Input, Label, Button } from "@/shadcn/components/ui";
+import { Input, Label } from "@/shadcn/components/ui";
+import { Button } from "@/shared/components";
 import { zodResolver } from "@hookform/resolvers/zod";
 import BirthdayField from "@/shared/components/BirthdayField";
 import { useToggle } from '@/shared/hooks';
@@ -11,9 +12,7 @@ import {
     IconEye,
     IconEyeOff
 } from '@tabler/icons-react';
-import updateNewUser from "@/app/actions/updateNewUser";
 import { useToast } from "@/shadcn/hooks/use-toast";
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 
 const NewUserSchema = z.object({
@@ -22,16 +21,15 @@ const NewUserSchema = z.object({
 })
 export type NewUserSchemaType = z.infer<typeof NewUserSchema>;
 
-export default function NewUserPage(params) {
+export default function OnboardPage() {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting }
+        formState: { isSubmitting }
     } = useForm<NewUserSchemaType>({ resolver: zodResolver(NewUserSchema) });
-    const [ birthday, setBirthday ] = useState();
+    const [ birthday, setBirthday ] = useState<Date | undefined>(undefined);
     const [ showPassword, toggleShowPassword ] = useToggle();
     const { toast } = useToast();
-    const router = useRouter();
     const passwordIconClass = "absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900 cursor-pointer";
 
     const onSubmit: SubmitHandler<NewUserSchemaType> = async (data) => {
@@ -77,13 +75,13 @@ export default function NewUserPage(params) {
                             {...register("password")}
                         />
                         {showPassword ?
-                              <IconEyeOff className={passwordIconClass} onClick={toggleShowPassword} />
-                            : <IconEye className={passwordIconClass} onClick={toggleShowPassword}/>
+                              <IconEyeOff className={passwordIconClass} onClick={() => toggleShowPassword()} />
+                            : <IconEye className={passwordIconClass} onClick={() => toggleShowPassword()}/>
                         }
                     </div>
                 </fieldset>
                 <div className="flex justify-end py-3">
-                    <Button type="submit">
+                    <Button type="submit" loading={isSubmitting.toString()}>
                         Complete
                     </Button>
                 </div>

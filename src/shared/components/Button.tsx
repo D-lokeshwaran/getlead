@@ -1,9 +1,12 @@
 import clsx from "clsx";
 import { Button as ShadcnButton } from "@/shadcn/components/ui/button";
 
+type ShadcnVariantType = "default" | "link" | "secondary" | "destructive" | "outline" | "ghost" | null | undefined;
+type CustomVariantType = "primary" | "success" | "icon-default" | null | undefined;
+
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: string,
-  loading?: boolean,
+  variant?: ShadcnVariantType | CustomVariantType,
+  loading?: boolean | string,
   children?: React.ReactNode;
 }
 
@@ -13,7 +16,7 @@ export default function Button({ name, variant, children, ...rest }: ButtonProps
     return (
         <ShadcnButton
             {...rest}
-            variant={variant}
+            variant={variant as ShadcnVariantType}
             className={clsx(
                 "flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-sm font-bold leading-normal tracking-[0.015em] focus-visible:outline-blue-500 active:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50",
                 rest?.className,

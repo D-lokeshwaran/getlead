@@ -1,4 +1,4 @@
-export default `
+const emailVerificationTemplate = `
     <body>
         <p>Hi,</p>
 
@@ -14,3 +14,5 @@ export default `
         <p>{{support.email}}</p>
     </body>
 `
+
+export default emailVerificationTemplate;

@@ -4,12 +4,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shadcn/components/ui/dropdown-menu";
 import { signOut } from 'next-auth/react';
 import { IconChevronDown, IconSettingsFilled } from '@tabler/icons-react';
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 
 interface AccountDropdownType {
@@ -17,7 +17,8 @@ interface AccountDropdownType {
 }
 
 export default function AccountDropdown({ toggleAccountDetails }: AccountDropdownType ) {
-    const { data: { user } } = useSession();
+    const { data: session } = useSession();
+    const user = session?.user;
 
     return (
         <DropdownMenu>
@@ -36,9 +37,12 @@ export default function AccountDropdown({ toggleAccountDetails }: AccountDropdow
                     onClick={() => toggleAccountDetails?.()}
                 >
                     <div className="flex gap-2 items-start">
-                        <img
+                        <Image
                             className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-7"
                             src={user?.image || "/icons/default-user.svg"}
+                            alt={`${user?.name} profile`}
+                            height={24}
+                            width={24}
                             referrerPolicy="no-referrer"
                         />
                         <div className="flex flex-col">

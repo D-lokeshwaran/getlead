@@ -2,11 +2,8 @@
 
 import { Session } from "next-auth";
 // import { useTheme } from "next-themes";
-import React, { useLayoutEffect } from "react";
+import React from "react";
 import { SessionProvider } from "next-auth/react";
-import connectMongoDB from "@/utils/mongoLib/connectMongoDB";
-import { useRouter } from "next/navigation";
-import User from "@/utils/mongoLib/models/user";
 
 type NextAuthProvider = {
   children: React.ReactNode;
@@ -14,16 +11,6 @@ type NextAuthProvider = {
 };
 
 const RootProvider = ({ children, session }: NextAuthProvider) => {
-
-    const router = useRouter()
-
-    //const { theme } = useTheme();
-    useLayoutEffect(() => {
-        console.log(session);
-    }, [])
-
-
-
     return (
         <main>
             <SessionProvider session={session}>{children}</SessionProvider>

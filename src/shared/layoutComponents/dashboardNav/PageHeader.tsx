@@ -3,9 +3,11 @@
 import { SideNav } from "@/shared/layoutComponents";
 import { useSession } from "next-auth/react";
 import { Separator } from "@/shadcn/components/ui/separator"
+import Image from 'next/image';
 
 export default function PageHeader() {
-    const { data: { user }} = useSession();
+    const { data: session } = useSession();
+    const user = session?.user;
     return (
         <div className="sticky top-0 bg-[white] w-screen">
             <div className="container flex min-w-72 p-4 flex-row justify-between items-center gap-4 md:hidden block w-screen">
@@ -15,10 +17,13 @@ export default function PageHeader() {
                         {user?.name}&apos;s Workspace
                     </p>
                 </div>
-                <img
+                <Image
                     className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-7"
-                    src={user?.image}
-                    referrerPolicy="no referrer"
+                    src={user?.image || "/icons/default-user.svg"}
+                    height={24}
+                    width={24}
+                    alt={`${user?.name} profile`}
+                    referrerPolicy="no-referrer"
                 />
             </div>
             <Separator/>

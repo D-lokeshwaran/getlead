@@ -9,16 +9,12 @@ import {
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/shadcn/components/ui/sheet"
 import { useToggle } from '@/shared/hooks';
-import { useSession } from 'next-auth/react';
 import { IconAlignLeft } from "@tabler/icons-react";
 
-export default function SideNav({ asSheet }: { asSheet: boolean | undefined }) {
+export default function SideNav({ asSheet }: { asSheet?: boolean | undefined }) {
     const [ openAccountDetails, toggleAccountDetails ] = useToggle();
     const [ openConfirmDelete, toggleConfirmDelete ] = useToggle();
 
@@ -45,7 +41,7 @@ export default function SideNav({ asSheet }: { asSheet: boolean | undefined }) {
 
     if (asSheet) {
         return (
-            <Sheet className="sm:block hidden">
+            <Sheet>
                 <SheetTrigger className="h-fit md:hidden block">
                     <IconAlignLeft/>
                 </SheetTrigger>

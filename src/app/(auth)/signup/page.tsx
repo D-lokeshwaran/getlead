@@ -8,9 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from 'react';
 import { z } from 'zod';
 import { SignInResponse, signIn } from 'next-auth/react';
-import { DatePickerForm } from "@/shared/components/DobForm";
+// import { DatePickerForm } from "@/shared/components/DobForm";
 import Link from 'next/link';
-import { useFormStatus } from 'react-dom';
 
 
 const EmailSchema = z.object({
@@ -26,17 +25,17 @@ export default function SignUp() {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { isSubmitting },
     } = useForm<UserSignInSchemaType>({ resolver: zodResolver(EmailSchema) });
-    const [ isDisabled, setIsDisabled ] = useState<boolean>();
+    //const [ isDisabled, setIsDisabled ] = useState<boolean>();
     const [ isOauthLoading, setIsOauthLoading ] = useState<boolean>();
     const { toast } = useToast();
 
-    const validateEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const email = event.target.value;
-        const validatedField = EmailSchema.safeParse({ email });
-        setIsDisabled(!validatedField.success);
-    }
+//     const validateEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+//         const email = event.target.value;
+//         const validatedField = EmailSchema.safeParse({ email });
+//         setIsDisabled(!validatedField.success);
+//     }
 
     const onSubmit: SubmitHandler<UserSignInSchemaType> = async (formData) => {
         const { email } = formData;
@@ -68,7 +67,7 @@ export default function SignUp() {
                 onClick={() => {
                     setIsOauthLoading(true);
                     signIn('google', { callbackUrl: '/' })
-                        .then(res => setIsOauthLoading(false))
+                        .then(() => setIsOauthLoading(false))
                 }}
                 disabled={isOauthLoading || isSubmitting}
             >
@@ -90,9 +89,8 @@ export default function SignUp() {
                         className="peer block w-full rounded-md border border-gray-200 py-[9px] px-3 text-sm outline-2 placeholder:text-gray-500"
                         id="email"
                         type="email"
-                        name="email"
                         placeholder="Enter your email address"
-                        onChange={validateEmail}
+                        //onChange={validateEmail}
                         {...register("email")}
                     />
                     <p className="text-[.8rem] py-1 text-[gray]">
@@ -109,7 +107,7 @@ export default function SignUp() {
                    className="w-full my-10 rounded-md"
                    type="submit"
                    loading={isSubmitting.toString()}
-                   disabled={isSubmitting || isDisabled || isOauthLoading}
+                   disabled={isSubmitting || isOauthLoading}
                 />
             </form>
         </>

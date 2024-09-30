@@ -1,6 +1,5 @@
 import nodemailer from 'nodemailer';
 import * as handlebars from 'handlebars';
-import { SendVerificationRequestParams } from "next-auth/providers/email"
 
 type placeHolderType = {
     [int:string]: string
@@ -16,16 +15,13 @@ export default async function sendCustomEmail(
     const {
         EMAIL_SERVER_USER,
         EMAIL_SERVER_PASSWORD,
-        EMAIL_SERVER_HOST,
-        EMAIL_SERVER_PORT,
         EMAIL_FROM,
         APP_NAME,
         CC_EMAIL
     } = process.env;
 
     const transport = nodemailer.createTransport({
-        host: EMAIL_SERVER_HOST,
-        port: EMAIL_SERVER_PORT,
+        service: "gmail",
         auth: {
             user: EMAIL_SERVER_USER,
             pass: EMAIL_SERVER_PASSWORD

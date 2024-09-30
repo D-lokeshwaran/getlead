@@ -3,29 +3,35 @@
 import connectMongoDB from "@/utils/mongoLib/connectMongoDB";
 import User from "@/utils/mongoLib/models/user";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import client from "@/utils/mongoLib/mongodb";
+import clientPromise from "@/utils/mongoLib/mongodb";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/utils/nextAuth/authOptions";
-import nextReact from 'next-auth/react';
 
+type CustomSessionType = {
+    accessToken: string,
+    provider: string,
+    providerAccountId: string
+}
 
-export const deleteAccount = async (email: string) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const deleteAccount = async (email: string) => {
     try {
         await connectMongoDB();
-        const { deleteUser, deleteSession, unlinkAccount } = MongoDBAdapter(client);
-        const { accessToken, providerAccountId } = await getServerSession(authOptions);
+        const { deleteUser, deleteSession, unlinkAccount } = await MongoDBAdapter(clientPromise);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { accessToken, provider, providerAccountId } = await getServerSession(authOptions) as CustomSessionType;
         const foundUser = await User.findOne({ email });
         if (!foundUser) {
             return { message: "User doesn't exists", status: 500 };
         }
         await Promise.all([
-            deleteSession(accessToken),
-            unlinkAccount({providerAccountId}),
+            deleteSession?.(accessToken),
+            unlinkAccount?.({ provider, providerAccountId }),
             User.deleteOne(foundUser._id),
-            deleteUser(foundUser._id), // cleanup all user related in db
+            deleteUser?.(foundUser._id), // cleanup all user related in db
         ])
-        .then(res => {
-            const deletedAccount = res?.[3];
+        .then(() => {
+            //const deletedAccount = res?.[3];
             console.log("Account deleted Successfully")
         })
         .catch(err => console.log("Account Delete Failed: ", err));
@@ -39,3 +45,5 @@ export const deleteAccount = async (email: string) => {
         return { message: "Something went wrong, please try later", status: 500 };
     }
 }
+
+export default deleteAccount

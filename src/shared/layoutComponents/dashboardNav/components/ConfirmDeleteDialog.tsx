@@ -9,27 +9,30 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/shadcn/components/ui/dialog";
 import {
   Alert,
   AlertDescription,
   AlertTitle,
 } from "@/shadcn/components/ui/alert";
-import { Input } from "@/shadcn/components/ui/input"
-import { Label } from "@/shadcn/components/ui/label";
-import { deleteAccount } from "@/app/actions/deleteAccount";
+import deleteAccount from "@/app/actions/deleteAccount";
 import { useSession, signOut } from "next-auth/react";
 import { useToast } from "@/shadcn/hooks/use-toast"
-import { useRouter } from 'next/navigation'
+import Image from 'next/image';
 
-export default function ConfirmDeleteDialog({ open, onClose }) {
-    const { data: { user } } = useSession();
-    const router = useRouter();
+export default function ConfirmDeleteDialog({
+    open,
+    onClose,
+}: {
+    open: boolean,
+    onClose: () => void
+}) {
+    const { data: session } = useSession();
+    const user = session?.user;
     const { toast } = useToast();
 
     const handleDeleteAccount = async () => {
-        await deleteAccount(user?.email)
+        await deleteAccount(user?.email as string)
             .then(res => {
                 if ([400, 500].includes(res.status)) {
                     toast({
@@ -61,10 +64,13 @@ export default function ConfirmDeleteDialog({ open, onClose }) {
                     <Alert variant="destructive">
                         <AlertTitle className="flex justify-between">
                             <div className="flex gap-2 items-start">
-                                <img
+                                <Image
                                     className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-7"
                                     src={user?.image || "/icons/default-user.svg"}
+                                    height={24}
+                                    width={24}
                                     referrerPolicy="no-referrer"
+                                    alt={`${user?.name} profile`}
                                 />
                                 <div className="flex flex-col">
                                     <h1 className="text-[#000000] font-medium leading-normal">{user?.name}</h1>

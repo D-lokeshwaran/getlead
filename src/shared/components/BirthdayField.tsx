@@ -10,8 +10,16 @@ import {
 } from "@/shadcn/components/ui/popover"
 import { useState } from 'react';
 
-export default function BirthdayField({ setBirthday, birthday }) {
-    const [date, setDate] = useState<Date>(birthday)
+export default function BirthdayField({
+    setBirthday,
+    birthday
+}: {
+    setBirthday?: React.Dispatch<React.SetStateAction<Date | undefined>>,
+    birthday?: Date | string
+}) {
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [date, setDate] = useState<any>(birthday)
 
     return (
         <fieldset>
@@ -23,7 +31,7 @@ export default function BirthdayField({ setBirthday, birthday }) {
                       variant={"outline"}
                       className={`w-full justify-start text-left font-normal ${!date && "text-muted-foreground"}`}
                     >
-                        {date ? date.toLocaleDateString("en-US") : <span>__/__/____</span>}
+                        {date ? date.toLocaleString("en-US") : <span>__/__/____</span>}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-full">
@@ -33,7 +41,7 @@ export default function BirthdayField({ setBirthday, birthday }) {
                       selected={date}
                       onSelect={(date) => {
                         setDate(date);
-                        setBirthday(date);
+                        setBirthday?.(date);
                       }}
                     />
                 </PopoverContent>
