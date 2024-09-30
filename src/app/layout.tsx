@@ -42,7 +42,7 @@ const RootLayout = async ({
                 className={`${notoSans.className} ${plusJakartaSans.className} antialiased`}
             >
                 <AppRootProvider session={session}>
-                    {isProduction ? <InConstruction/> : children}
+                    {isProduction && session ? <InConstruction/> : children}
                 </AppRootProvider>
                 <Toaster/>
             </body>
