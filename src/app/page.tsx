@@ -10,6 +10,7 @@ export default async function App() {
     const session = await getServerSession(authOptions);
 
     if (session) {
+        const user = session?.user;
         if (process.env.NODE_ENV === "production") {
             return (
                 <div className="flex items-center justify-center flex-col h-screen bg-[#f4efe6]">
